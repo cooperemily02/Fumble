@@ -63,15 +63,17 @@ function Simple () {
   }
 
   return (
-    <div>
+    <div className='readable'>
       <link href='https://fonts.googleapis.com/css?family=Damion&display=swap' rel='stylesheet' />
       <link href='https://fonts.googleapis.com/css?family=Alatsi&display=swap' rel='stylesheet' />
-      <h1>React Tinder Card</h1>
+      <link href='https://fonts.googleapis.com/css2?family=Staatliches&display=swap' rel='stylesheet' />
+      
+      <h1>Swipe right on your fave deals!</h1>
       <div className='cardContainer'>
         {characters.map((character) =>
           <TinderCard className='swipe' key={character.name} onSwipe={(dir) => swiped(dir, character.name)} onCardLeftScreen={() => outOfFrame(character.name)}>
             <div style={{ backgroundImage: 'url(' + character.url + ')' }} className='card'>
-              <h1>{character.name} {character.price}</h1>
+              <h2>{character.name} {character.price}</h2>
             </div>
           </TinderCard>
         )}
