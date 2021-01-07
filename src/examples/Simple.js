@@ -27,13 +27,14 @@ var queried = false;
 //   return rest
 // }
 
+var count = 0;
 var savedforlater = []
 function Simple() {
   console.log("called");
   var temparray = [];
   const [arrayofplaces, setarray] = useState([
     {
-      name: "Finding you deals..",
+      name: "Finding you deals...",
       imageurl: "",
       price_saved: 0,
       description: "",
@@ -44,7 +45,7 @@ function Simple() {
   useEffect(() => {
     if (!queried) {
       fetch(
-        "https://api.discountapi.com/v2/deals?category_slugs=restaurants&location=longmeadow&api_key=KiyYblAt"
+        "https://api.discountapi.com/v2/deals?category_slugs=restaurants&location=arlington,va&api_key=KiyYblAt"
       )
         .then(function (response) {
           return response.json();
@@ -100,6 +101,10 @@ function Simple() {
     fineprinta,
     urla
   ) => {
+    if(arrayofplaces.length == count)
+    {
+      alert("You're all out of cards :(");
+    }
     if(direction === "up" || direction === "down")
     {
         savedforlater.push({
@@ -168,6 +173,7 @@ function Simple() {
     }
     console.log("removing: " + nameToDelete);
     setLastDirection(direction);
+    count++;
   };
 
   const outOfFrame = (name) => {

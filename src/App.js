@@ -12,6 +12,13 @@ function App () {
     <div className='app'>
         <Simple/>
       <div className='row'>
+            <div id="locationModal" class="modal">
+                <div id = "locModal" class="modal-content">
+                  <span class="close">&times;</span>
+                  <label for="exampleFormControlSelect1"> Enter a keyword: &nbsp;</label>
+                  <input type="Search" class="form-control" required="true" id="Search" placeholder="Covid-19, Dogs..."></input>
+                </div>
+            </div>
             <div id="myModal" class="modal">
                 <div id = "modalcontent" class="modal-content">
                   <span class="close">&times;</span>
