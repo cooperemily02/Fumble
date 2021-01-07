@@ -53,14 +53,14 @@ const db = [
 // var swipes = 0
 function Simple () {
   var temparray = []
-  const [arrayofplaces, setarray] = useState([{name: 'No Name', url: './img/richard.jpg', price: 1}])
+  const [arrayofplaces, setarray] = useState([{name: 'No Name', url: '', price_saved: 0}])
   useEffect(() => {
     fetch('https://api.discountapi.com/v2/deals?category_slugs=restaurants&location=longmeadow&api_key=KiyYblAt').then(function (response) {
       return response.json();
     }).then(function (result) {
       console.log(result)
       for(var i = 0; i<result.deals.length; i++){
-        temparray.push({name: result.deals[i].deal.short_title, url: './img/richard.jpg', price: 1})
+        temparray.push({name: result.deals[i].deal.short_title, url: result.deals[i].deal.image_url, price_saved: result.deals[i].deal.discount_amount})
       }
       console.log(temparray)
       setarray(temparray)
@@ -85,15 +85,15 @@ function Simple () {
   // characters = arrayofplaces
 
   var swipedRight = []
-  var weightVals = []
+  var price_saved_vals = []
   var swipes = 0
-  const swiped = (direction, nameToDelete, weight) => {
+  const swiped = (direction, nameToDelete, price_saved) => {
       if(direction === 'right'){
         swipes++
-        swipedRight.push(nameToDelete)
-        weightVals.push(weight)
+        swipedRight.push({name: nameToDelete, savings:price_saved})
+        price_saved_vals.push(price_saved)
         // var length = swipedRight.length
-        // console.log(swipedRight)
+        console.log(swipedRight)
         // console.log('Test')
         // give users a minimum number of swipes before giving them the best deal
         // var i = 0
@@ -146,7 +146,7 @@ function Simple () {
         {arrayofplaces.map((place) =>
           <TinderCard className='swipe' key={place.name} onSwipe={(dir) => swiped(dir, place.name, place.price)} onCardLeftScreen={() => outOfFrame(place.name)}>
             <div style={{ backgroundImage: 'url(' + place.url + ')' }} className='card'>
-              <h2>{place.name} {place.price}</h2>
+              <h2>{place.name}</h2>
             </div>
           </TinderCard>
         )}
