@@ -8,18 +8,18 @@ import Simple from './examples/Simple'
 
 
 function App () {
-  const [arrayofplaces, setplaces]  =  useState(true)
-  const [showAdvanced, setShowAdvanced] = useState(true)
-
   return (
     <div className='app'>
         <Simple/>
       <div className='row'>
-        {/* <p style={{ color: '#fff' }}>Show advanced example</p> <Switch checked={showAdvanced} onChange={setShowAdvanced} /> */}
             <div id="myModal" class="modal">
-                <div class="modal-content">
+                <div id = "modalcontent" class="modal-content">
                   <span class="close">&times;</span>
-                  <p>NEED TO ADD THE DEAL HERE</p>
+                      <h1 id = "banner"> "" </h1>
+                      <p id="deal" >NEED TO ADD THE DEAL HERE</p>
+                      <p id="description"></p>
+                      <p id="finePrint"></p>
+                      <a id="url" href=""></a>
                 </div>
             </div>
       </div>

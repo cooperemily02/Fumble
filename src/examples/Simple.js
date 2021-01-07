@@ -1,179 +1,241 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from "react";
 // import TinderCard from '../react-tinder-card/index'
-import TinderCard from 'react-tinder-card'
-import ReactDOM from 'react-dom';
-const MongoClient = require('mongodb').MongoClient
-//MongoClient.connect('mongodb+srv://shambhavir:Success2021!!@cluster0.xrzxq.mongodb.net/fumble?retryWrites=true&w=majority'
-const db = [
-  {
-    name: 'Taco Bell',
-    url: './img/richard.jpg',
-    price: 1
-  },
-  {
-    name: 'Olive Garden',
-    url: './img/erlich.jpg',
-    price: 2
-  },
-  {
-    name: 'Chipotle',
-    url: './img/monica.jpg',
-    price: 3
-  },
-  {
-    name: 'Dominoes',
-    url: './img/jared.jpg',
-    price: 4
-  },
-  {
-    name: 'Wawa',
-    url: './img/dinesh.jpg',
-    price: 5
-  },
-  {
-    name: 'comfort food',
-    type: 'category'
-  }
-]
+import TinderCard from "react-tinder-card";
+import ReactDOM from "react-dom";
 
-// function callAPI () {
-//   if (true) {
-//     fetch('https://api.geoapify.com/v2/places?categories=commercial.food_and_drink&filter=circle:-72.519867,42.375801,5000&limit=20&apiKey=1af6a8fa67c94cba9c73377e2866a995').then(function (response) {
-//       return response.json();
-//     }).then(function (result) {
-//       for(var i = 0; i<result.features.length; i++){
-//         arrayofplaces.push({name: result.features[i].properties.name, url: './img/richard.jpg', price: 1})
-//       }
-//     });
+var queried = false;
+
+// function findbestdeal(placearray){
+//   var highest = Number.MIN_VALUE;
+//   var rest = 'test';
+
+//   for (var place in placearray){
+//     console.log("entering function")
+//     console.log(place.savings)
+//     console.log(highest)
+//     if(place.savings>highest){
+//       console.log("entering if")
+//       console.log(place.savings)
+//       highest = place.savings
+//       rest = place.name
+//       console.log("printing rest")
+//       console.log(rest)
+//       console.log("printing place")
+//       console.log(place.name)
+//     }
 //   }
+//   return rest
 // }
 
-// var swipedRight = []
-// var currentChoices = [0, 0, 0, 0] 
-// var swipes = 0
-function Simple () {
-  var temparray = []
-  const [arrayofplaces, setarray] = useState([{name: 'No Name', url: '', price_saved: 0}])
+var savedforlater = []
+function Simple() {
+  console.log("called");
+  var temparray = [];
+  const [arrayofplaces, setarray] = useState([
+    {
+      name: "Finding you deals..",
+      imageurl: "",
+      price_saved: 0,
+      description: "",
+      fineprint: "",
+      url: "",
+    },
+  ]);
   useEffect(() => {
-    fetch('https://api.discountapi.com/v2/deals?category_slugs=restaurants&location=longmeadow&api_key=KiyYblAt').then(function (response) {
-      return response.json();
-    }).then(function (result) {
-      console.log(result)
-      for(var i = 0; i<result.deals.length; i++){
-        temparray.push({name: result.deals[i].deal.short_title, url: result.deals[i].deal.image_url, price_saved: result.deals[i].deal.discount_amount})
-      }
-      console.log(temparray)
-      setarray(temparray)
-    });
+    if (!queried) {
+      fetch(
+        "https://api.discountapi.com/v2/deals?category_slugs=restaurants&location=longmeadow&api_key=KiyYblAt"
+      )
+        .then(function (response) {
+          return response.json();
+        })
+        .then(function (result) {
+          console.log(result);
+          queried = true;
+          for (var i = 0; i < result.deals.length; i++) {
+            temparray.push({
+              name: result.deals[i].deal.title,
+              imageurl: result.deals[i].deal.image_url,
+              price_saved: result.deals[i].deal.discount_amount,
+              description: result.deals[i].deal.description,
+              fineprint: result.deals[i].deal.fineprint,
+              url: result.deals[i].deal.url,
+            });
+          }
+          setarray(temparray);
+        });
+    }
   });
-  
-    
-  // const arrayofplaces = useState([])
-  // callAPI(() =>{
-  //   fetch('https://api.geoapify.com/v2/places?categories=commercial.food_and_drink&filter=circle:-72.519867,42.375801,5000&limit=20&apiKey=1af6a8fa67c94cba9c73377e2866a995').then(function (response) {
-  //     return response.json();
-  //   }).then(function (result) {
-  //     for(var i = 0; i<result.features.length; i++){
-  //       arrayofplaces.push({name: result.features[i].properties.name, url: './img/richard.jpg', price: 1})
-  //     }
-  //   });
-  // }, []);
-  // console.log(arrayofplaces)
- // const characters = db
-  const [lastDirection, setLastDirection] = useState()
-  // var characters = []
-  // characters = arrayofplaces
 
-  var swipedRight = []
-  var price_saved_vals = []
-  var swipes = 0
-  const swiped = (direction, nameToDelete, price_saved) => {
-      if(direction === 'right'){
-        swipes++
-        swipedRight.push({name: nameToDelete, savings:price_saved})
-        price_saved_vals.push(price_saved)
-        // var length = swipedRight.length
-        console.log(swipedRight)
-        // console.log('Test')
-        // give users a minimum number of swipes before giving them the best deal
-        // var i = 0
-        // while(i < 4)
-        // {
-        //   swipes++
-        //   swipedRight.push(nameToDelete)
-        //   var length = swipedRight.length
-        //   //console.log(swipedRight)
-        //   //console.log('Test')
-        //   currentChoices[i] = db.price 
-        //   i++; 
-        // }
+  const [lastDirection, setLastDirection] = useState();
+  var swipedRight = [];
+  var price_saved_vals = [];
+  var swipes = 0;
+    
+  const clicked = (
+    title,
+    description,
+    fineprint
+  ) => {
+      var modal = document.getElementById("myModal");
+      var modaltext = document.getElementById("deal");
+      document.getElementById("banner").textContent = "More Information"
+      document.getElementById("deal").textContent = title;
+      document.getElementById("description").textContent = description;
+      document.getElementById("finePrint").textContent = fineprint;
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName("close")[0];
+      modal.style.display = "block";
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function () {
+          modal.style.display = "none";
+      };
+  };
+    
+  const swiped = (
+    direction,
+    nameToDelete,
+    price_saved,
+    descriptiona,
+    fineprinta,
+    urla
+  ) => {
+    if(direction === "up" || direction === "down")
+    {
+        savedforlater.push({
+                name: nameToDelete,
+                description: descriptiona,
+                fineprint: fineprinta,
+                url: urla
         
-        // for(i = 0; i < currentChoices.length; i++)
-        //   console.log(currentChoices[i]); 
-        if(swipes === 4) {
-          console.log('done')
-          var modal = document.getElementById("myModal");
-          // Get the <span> element that closes the modal
-          var span = document.getElementsByClassName("close")[0];
-          modal.style.display = "block";
-          // When the user clicks on <span> (x), close the modal
-          span.onclick = function() {
-              modal.style.display = "none";
+        })
+    }
+    if (direction === "right") {
+      swipes++;
+      swipedRight.push({
+        name: nameToDelete,
+        savings: price_saved,
+        description: descriptiona,
+        fineprint: fineprinta,
+        url: urla,
+      });
+      // price_saved_vals.push(price_saved)
+      // var length = swipedRight.length
+      console.log(swipedRight);
+      // console.log(price_saved_vals)
+      if (swipes === 4) {
+        // var ans = findbestdeal(swipedRight)
+        var highest = Number.MIN_VALUE;
+        var ans = "test";
+
+        for (var i = 0; i < swipedRight.length; i++) {
+          // console.log("entering function")
+          // console.log(swipedRight[i].savings)
+
+          if (swipedRight[i].savings > highest) {
+            // console.log("entering if")
+            // console.log(swipedRight[i].savings)
+            highest = swipedRight[i].savings;
+            ans = swipedRight[i];
+            // console.log("printing rest")
+            // console.log(ans)
+            // console.log("printing place")
+            // console.log(swipedRight[i].name)
           }
         }
-
+        // console.log(typeof(ans))
+        // console.log(ans)
+        var modal = document.getElementById("myModal");
+        var modaltext = document.getElementById("deal");
+        document.getElementById("banner").textContent = "HERE IS YOUR DEAL WOOOO"
+        document.getElementById("deal").textContent = ans.name;
+        document.getElementById("description").textContent = ans.description;
+        document.getElementById("finePrint").textContent = ans.fineprint;
+        document.getElementById("url").style.display = "block"
+        document.getElementById("url").textContent = "Click here for link to deal";
+        document.getElementById("url").setAttribute("href", ans.url);
+        document.getElementById("url").setAttribute("target", "_blank");
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+        modal.style.display = "block";
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+          document.getElementById("url").style.display = "none"
+          modal.style.display = "none";
+              swipes = 0;
+        };
       }
-      // const toBeRemoved = cardsLeft[cardsLeft.length - 1].name // Find the card object to be removed
-      // const index = db.map(person => person.name).indexOf(toBeRemoved) // Find the index of which to make the reference to
-      // alreadyRemoved.push(toBeRemoved) // Make sure the next card gets removed next time if this card do not have time to exit the screen
-      // childRefs[index].current.swipe(dir) // Swipe the card!
-    console.log('removing: ' + nameToDelete)
-    setLastDirection(direction)
-  }
+    }
+    console.log("removing: " + nameToDelete);
+    setLastDirection(direction);
+  };
 
   const outOfFrame = (name) => {
-    console.log(name + ' left the screen!')
-  }
+    console.log(name + " left the screen!");
+  };
 
   return (
-    <div className='readable'>
-      <link href='https://fonts.googleapis.com/css?family=Damion&display=swap' rel='stylesheet' />
-      <link href='https://fonts.googleapis.com/css?family=Alatsi&display=swap' rel='stylesheet' />
-      <link href='https://fonts.googleapis.com/css2?family=Staatliches&display=swap' rel='stylesheet' />
-      
+    <div className="readable">
+      <link
+        href="https://fonts.googleapis.com/css?family=Damion&display=swap"
+        rel="stylesheet"
+      />
+      <link
+        href="https://fonts.googleapis.com/css?family=Alatsi&display=swap"
+        rel="stylesheet"
+      />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Staatliches&display=swap"
+        rel="stylesheet"
+      />
+
       <h1>Swipe right on your fave deals!</h1>
-      <div className='cardContainer'>
-        {arrayofplaces.map((place) =>
-          <TinderCard className='swipe' key={place.name} onSwipe={(dir) => swiped(dir, place.name, place.price)} onCardLeftScreen={() => outOfFrame(place.name)}>
-            <div style={{ backgroundImage: 'url(' + place.url + ')' }} className='card'>
+      <div className="cardContainer">
+        {arrayofplaces.map((place) => (
+          <TinderCard
+            className="swipe"
+            key={place.name}
+            onSwipe=
+            {
+              (dir) =>
+              swiped
+              (
+                dir,
+                place.name,
+                place.price_saved,
+                place.description,
+                place.fineprint,
+                place.url
+              )
+            }
+            onCardLeftScreen={() => outOfFrame(place.name)}
+          >
+            <div
+              style={{ backgroundImage: "url(" + place.image_url + ")" }}
+              className="card"
+            >
               <h2>{place.name}</h2>
+                    <button onClick=
+                        {
+                            () => clicked
+                                (
+                                    place.name,
+                                    place.description,
+                                    place.fineprint
+                                )
+                        }> Details </button>
+
             </div>
           </TinderCard>
-        )}
+        ))}
       </div>
-      {lastDirection ? <h2 className='infoText'>You swiped {lastDirection}</h2> : <h2 className='infoText' />}
+      {lastDirection ? (
+        <h2 className="infoText">You swiped {lastDirection}</h2>
+      ) : (
+        <h2 className="infoText" />
+      )}
     </div>
-  )
-  
-  // return (
-  //   <div className='readable'>
-  //     <link href='https://fonts.googleapis.com/css?family=Damion&display=swap' rel='stylesheet' />
-  //     <link href='https://fonts.googleapis.com/css?family=Alatsi&display=swap' rel='stylesheet' />
-  //     <link href='https://fonts.googleapis.com/css2?family=Staatliches&display=swap' rel='stylesheet' />
-      
-  //     <h1>Swipe right on your fave deals!</h1>
-  //     <div className='cardContainer'>
-  //       {characters.map((charact) =>
-  //         <TinderCard className='swipe' key={place.name} onSwipe={(dir) => swiped(dir, place.name)} onCardLeftScreen={() => outOfFrame(place.name)}>
-  //           <div style={{ backgroundImage: 'url(' + place.url + ')' }} className='card'>
-  //             <h2>{place.name} {place.sprice}</h2>
-  //           </div>
-  //         </TinderCard>
-  //       )}
-  //     </div>
-  //     {lastDirection ? <h2 className='infoText'>You swiped {lastDirection}</h2> : <h2 className='infoText' />}
-  //   </div>
-  // ) 
+  );
 }
 
-export default Simple
+export default Simple;
