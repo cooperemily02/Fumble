@@ -5,27 +5,10 @@ import ReactDOM from "react-dom";
 
 var queried = false;
 
-// function findbestdeal(placearray){
-//   var highest = Number.MIN_VALUE;
-//   var rest = 'test';
-
-//   for (var place in placearray){
-//     console.log("entering function")
-//     console.log(place.savings)
-//     console.log(highest)
-//     if(place.savings>highest){
-//       console.log("entering if")
-//       console.log(place.savings)
-//       highest = place.savings
-//       rest = place.name
-//       console.log("printing rest")
-//       console.log(rest)
-//       console.log("printing place")
-//       console.log(place.name)
-//     }
-//   }
-//   return rest
-// }
+// var citySearch =  document.getElementById("city").value
+// var stateSearch =  document.getElementById("state").value
+// var searchcombination = citySearch + ',' + stateSearch
+// searchcombination = searchcombination.toLowerCase()
 
 var count = 0;
 var savedforlater = []
@@ -45,7 +28,7 @@ function Simple() {
   useEffect(() => {
     if (!queried) {
       fetch(
-        "https://api.discountapi.com/v2/deals?category_slugs=restaurants&location=arlington,va&api_key=KiyYblAt"
+        "https://api.discountapi.com/v2/deals?category_slugs=restaurants&location=${searchcombination}&api_key=KiyYblAt"
       )
         .then(function (response) {
           return response.json();
