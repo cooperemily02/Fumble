@@ -117,7 +117,7 @@ function Simple() {
       document.getElementById("deal").textContent = title;
       document.getElementById("description").textContent = description;
       document.getElementById("finePrint").textContent = fine_print;
-      document.getElementById("savings").textContent = ""
+      document.getElementById("savings")
       // Get the <span> element that closes the modal
       var span = document.getElementsByClassName("close")[0];
       modal.style.display = "block";
