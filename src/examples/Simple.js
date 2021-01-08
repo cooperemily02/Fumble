@@ -3,32 +3,56 @@ import React, { useState, useEffect } from "react";
 import TinderCard from "react-tinder-card";
 import ReactDOM from "react-dom";
 
-var queried = false;
-
-// var citySearch =  document.getElementById("city").value
-// var stateSearch =  document.getElementById("state").value
-// var searchcombination = citySearch + ',' + stateSearch
-// searchcombination = searchcombination.toLowerCase()
+var queried = false
+// var searchcombination = 'richmond,va'
 
 var count = 0;
-var savedforlater = []
+var savedforlater = [] // contains the saved deals
+var url_pics = ''
+// --- random number for images
+const food = [
+  {
+          img: 'Richard Hendricks',
+          url: "/docs/img/dinesh.jpg",
+          num: 0
+        },
+        {
+          img: 'Erlich Bachman',
+          url: "/docs/img/erlich.jpg",
+          num: 1
+    
+        }
+]
+function getRandomNumberBetween(min,max){
+  var num = Math.floor(Math.random()*(max-min+1)+min)
+  url_pics = food[num].url
+  console.log(url_pics)
+}
+getRandomNumberBetween(0,1);
+
+// ---
+
 function Simple() {
-  console.log("called");
-  var temparray = [];
+  console.log(temparray)
+  //console.log("searchcombination: " + searchcombination)
+  var temparray = []
   const [arrayofplaces, setarray] = useState([
     {
       name: "Finding you deals...",
-      imageurl: "",
       price_saved: 0,
       description: "",
       fineprint: "",
-      url: "",
     },
   ]);
+    
+  var [searchcombination, setlocation] = useState('richmond,va')
+
   useEffect(() => {
+    console.log("in useEffect")
     if (!queried) {
+
       fetch(
-        "https://api.discountapi.com/v2/deals?category_slugs=restaurants&location=${searchcombination}&api_key=KiyYblAt"
+        "https://api.discountapi.com/v2/deals?category_slugs=restaurants&location=" + searchcombination + "&api_key=KiyYblAt"
       )
         .then(function (response) {
           return response.json();
@@ -39,7 +63,6 @@ function Simple() {
           for (var i = 0; i < result.deals.length; i++) {
             temparray.push({
               name: result.deals[i].deal.title,
-              imageurl: result.deals[i].deal.image_url,
               price_saved: result.deals[i].deal.discount_amount,
               description: result.deals[i].deal.description,
               fineprint: result.deals[i].deal.fineprint,
@@ -48,14 +71,40 @@ function Simple() {
           }
           setarray(temparray);
         });
-    }
-  });
+      }
+  }, [searchcombination])
 
   const [lastDirection, setLastDirection] = useState();
-  var swipedRight = [];
-  var price_saved_vals = [];
-  var swipes = 0;
-    
+  var swipedRight = []; // tracks the deals that the user liked
+  var swipes = 0; // tracks the number of swipes used
+
+  // connected to the search button - updates the location chosen by the user
+  const changelocation = () => {
+
+    console.log("in the search")
+
+    var city = document.getElementById("citySearch").value
+    var state = document.getElementById("stateSearch").value
+    searchcombination = city + ',' + state
+    searchcombination = searchcombination.toLowerCase()
+    console.log(searchcombination)
+    queried = false
+    setlocation(searchcombination)
+  }
+
+  const savedclick = (
+    arrayofsaved
+  )  => {
+  var modal = document.getElementById("savedModal");
+  var span = document.getElementById("secondmodal");
+  modal.style.display = "block";
+  span.onclick = function () {
+    modal.style.display = "none";
+    };
+  }
+
+  // called every time the details button is clicked - displays a modal containing a
+  // more detailed description of the deal
   const clicked = (
     title,
     description,
@@ -88,16 +137,36 @@ function Simple() {
     {
       alert("You're all out of cards :(");
     }
-    if(direction === "up" || direction === "down")
-    {
-        savedforlater.push({
-                name: nameToDelete,
-                description: descriptiona,
-                fineprint: fineprinta,
-                url: urla
-        
-        })
-    }
+        if  (direction === "up" || direction === "down"){
+              if  (savedforlater.length  <  5){
+                    savedforlater.push({
+                    name: nameToDelete,
+                    description: descriptiona,
+                    fineprint: fineprinta,
+                    })
+                    var i = savedforlater.length
+                  var elemid = "slide " + savedforlater.length;
+                  var slide = document.getElementById(elemid);
+                  slide.style.display = "block"
+                  var banner = document.getElementById("banner2");
+                  banner.innerHTML = "Your Saved Deals"
+                  var name = document.getElementById("name " + i);
+                  var desc = document.getElementById("desc " + i);
+                  var finepr = document.getElementById("finepr " + i);
+                  var url = document.getElementById("url " + i);
+
+                  name.innerHTML = nameToDelete
+                  desc.innerHTML = descriptiona;
+                  finepr.innerHTML = fineprinta;
+                  url.innerHTML = "Link"
+                  url.setAttribute("href", urla)
+                  url.setAttribute("target", "_blank");
+            }
+            else{
+                  alert("Too many deals!")
+              }
+      }
+    
     if (direction === "right") {
       swipes++;
       swipedRight.push({
@@ -107,32 +176,17 @@ function Simple() {
         fineprint: fineprinta,
         url: urla,
       });
-      // price_saved_vals.push(price_saved)
-      // var length = swipedRight.length
       console.log(swipedRight);
-      // console.log(price_saved_vals)
       if (swipes === 4) {
-        // var ans = findbestdeal(swipedRight)
         var highest = Number.MIN_VALUE;
         var ans = "test";
 
         for (var i = 0; i < swipedRight.length; i++) {
-          // console.log("entering function")
-          // console.log(swipedRight[i].savings)
-
           if (swipedRight[i].savings > highest) {
-            // console.log("entering if")
-            // console.log(swipedRight[i].savings)
             highest = swipedRight[i].savings;
             ans = swipedRight[i];
-            // console.log("printing rest")
-            // console.log(ans)
-            // console.log("printing place")
-            // console.log(swipedRight[i].name)
           }
         }
-        // console.log(typeof(ans))
-        // console.log(ans)
         var modal = document.getElementById("myModal");
         var modaltext = document.getElementById("deal");
         document.getElementById("banner").textContent = "HERE IS YOUR DEAL WOOOO"
@@ -151,6 +205,7 @@ function Simple() {
           document.getElementById("url").style.display = "none"
           modal.style.display = "none";
               swipes = 0;
+              swipedRight = []
         };
       }
     }
@@ -176,11 +231,18 @@ function Simple() {
       <link
         href="https://fonts.googleapis.com/css2?family=Staatliches&display=swap"
         rel="stylesheet"
-      />
+          />
+          
+    <div className="text">
+        <input className="form-entry" type="text" placeholder="Enter your city..." id="citySearch" />
+        <input type="text" placeholder="Enter your state.." id="stateSearch" />
+        <button type="button" onClick={() => changelocation()}>Search</button>
+    </div>
 
       <h1>Swipe right on your fave deals!</h1>
       <div className="cardContainer">
         {arrayofplaces.map((place) => (
+
           <TinderCard
             className="swipe"
             key={place.name}
@@ -198,11 +260,17 @@ function Simple() {
               )
             }
             onCardLeftScreen={() => outOfFrame(place.name)}
+            
           >
+            
             <div
-              style={{ backgroundImage: "url(" + place.image_url + ")" }}
+              // style={{ backgroundImage: "url(" + url_pics + ")" }}
+              style={{ backgroundImage: `url(${url_pics})` }}
+
               className="card"
+              
             >
+            
               <h2>{place.name}</h2>
                     <button onClick=
                         {
@@ -217,12 +285,18 @@ function Simple() {
             </div>
           </TinderCard>
         ))}
+        <h3> You're Out Of Cards</h3>
       </div>
       {lastDirection ? (
         <h2 className="infoText">You swiped {lastDirection}</h2>
       ) : (
         <h2 className="infoText" />
       )}
+      <button id = "savedcards" onClick = 
+      {
+        () => savedclick (savedforlater)
+      }
+      > See Your Saved Cards </button>
     </div>
   );
 }
