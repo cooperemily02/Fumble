@@ -4,7 +4,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "aws": "^0.0.3-2",
+    "aws-sdk": "^2.824.0",
+    "axios": "^0.21.1",
     "bootstrap": "^4.5.3",
+    "confetti-js": "^0.0.18",
     "mongodb": "^3.6.3",
     "p-sleep": "^1.1.0",
     "react": "^16.13.1",
