@@ -13,14 +13,13 @@
     "serve": "^11.3.2"
   },
   "scripts": {
-    "start": "serve -s build",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "dev": "react-scripts-start",
-    "heroku-postbuild": "npm run build"
+    "dev": "react-scripts-start"
   },
   "eslintConfig": {
     "extends": "react-app"
