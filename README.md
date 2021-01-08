@@ -15,7 +15,7 @@ As a college student, we aren’t only trying to make a fast decision, we are tr
 * React Bootstrap
 * React Carousel
 * React Router-DOM
-* yarn
+* npm
 * AWS Amplify 
 * Discounts API
 
@@ -28,9 +28,9 @@ As a college student, we aren’t only trying to make a fast decision, we are tr
 ### Setup
 * Create a folder in your local directory where you would like to begin/run this project
 * cd yourfolder
-* yarn create react-app my-app
-* yarn add react-tinder-card
-* yarn add react-router-dom
+* npm create react-app my-app
+* npm add react-tinder-card
+* npm add react-router-dom
 * Create an account with Dicounts API for different calls 
 
 ### Folder Contents
