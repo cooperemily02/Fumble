@@ -1,8 +1,9 @@
 # Fumble 
 As a college student, we aren’t only trying to make a fast decision, we are trying to make a financially responsible one. One of the biggest expenses of college students is food. Many students live in dorms and often rely on eating out, but are not aware of the deals that exist. Fumble makes this decision easy! Simply swipe on your favorite deals and the app will match with your ideal savings.
 
-## Check it out!
-Our app won the grand prize in the January 2021 Capital One SWE Summit hackathon! 
+## Our app won the grand prize in the January 2021 Capital One SWE Summit hackathon!
+
+## Check it out! 
 https://main.d2r61nlnpovm5z.amplifyapp.com
 
 ## Table of Contents
